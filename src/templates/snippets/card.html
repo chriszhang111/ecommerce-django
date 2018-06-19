@@ -1,0 +1,18 @@
+<div class="card" style="width: 20rem;">
+  {% if instance.image %}
+    <a href="{{ instance.get_absolute_url }}"><img class="card-img-top" src="{{ instance.image.url }}" alt="{{ instance.title}} logo"></a>
+    {% endif %}
+  <div class="card-body">
+    <h4 class="card-title">{{ instance.title }}</h4>
+    <p class="card-text">{{ instance.description|truncatewords:12 }}</p>
+      <div class="row">
+          <div class="col-6">
+    <a href="{{ instance.get_absolute_url }}" class="btn btn-primary">View</a>
+              </div>
+          <div class="col-6">
+      {% include 'products/update-cart.html' with product=instance cart=cart%}
+          </div>
+          </div>
+
+  </div>
+</div>

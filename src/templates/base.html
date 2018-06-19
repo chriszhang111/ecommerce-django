@@ -1,0 +1,263 @@
+{% load static %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Base Template</title>
+        {% include 'base/css.html' %}
+        {% block base_head %}{% endblock %}
+    </head>
+    <body>
+      {% include 'base/navbar.html' with brand_name='eCommerce' %}
+      <div class="container">
+      {% block content %}{% endblock %}
+
+</div>
+
+
+        {% include 'base/js.html' %}
+
+      <script>
+          $(document).ready(function () {
+              //contact form handle
+              var contactForm = $(".contact-form");
+              var contactMethod = contactForm.attr("method");
+              var contactFormEndpoint = contactForm.attr("action");
+
+              contactForm.submit(function (event) {
+                  var contactData = contactForm.serialize();
+                  var thisForm = $(this);
+                  $.ajax({
+                      method:contactMethod,
+                      url:contactFormEndpoint,
+                      data:contactData,
+                      success:function (data) {
+                          thisForm[0].reset();
+
+                          alert("Thank you for your submission")
+                      },
+                      error:function (data) {
+                          console.log(data);
+                      }
+                  })
+
+
+              })
+
+
+
+
+
+
+              //auto search
+
+              var searchForm = $(".search-form");
+              var input = searchForm.find("[name='q']")
+              var typingTimer;
+              var typingInterval = 500;
+              var searchBtn = searchForm.find("[type='submit']");
+
+              input.keyup(function (event) {
+                  clearTimeout(typingTimer);
+                  typingTimer = setTimeout(performSearch,typingInterval)
+
+
+              })
+
+              input.keydown(function (event) {
+                  clearTimeout(typingTimer);
+              })
+
+              function doSearch(){
+                  searchBtn.addClass("disabled")
+                  searchBtn.html("<i class='fa fa-spin fa-spinner'></i> Searching...")
+              }
+
+              function performSearch(){
+                  doSearch();
+                  var query = input.val();
+                  window.location.href = '/search/?q='+query;
+              }
+
+
+
+
+
+
+
+              var productForm = $(".form-product-ajax");
+              productForm.submit(function (event) {
+                  event.preventDefault();
+                  var thisForm = $(this);
+                  var Endpoint = thisForm.attr("action");
+                  var httpMethod = thisForm.attr("method");
+                  var formData = thisForm.serialize();
+
+                  $.ajax({
+                      url:Endpoint,
+                      method:httpMethod,
+                      data:formData,
+                      success: function (data) {
+                          var submitspan = thisForm.find(".submit-span");
+                          if(data.added){
+
+                              submitspan.html("<button type='submit' class='btn btn-danger'>Remove</button>");
+                              window.location.reload()
+                              //submitspan.text("<button type='submit' class='btn btn-danger'> Remove</button>");
+                          }
+                          else{
+                              submitspan.html(" <button type='submit'  class='btn btn-success'>Add to Cart</button>");
+                          }
+
+                          var navcount = $(".navbar-cart-count");
+                          navcount.text(data.cartItemCount);
+                          var currentPath = window.location.href;
+
+                          if(currentPath.indexOf("cart")!=-1){
+                              refreshCart();
+                          }
+
+
+
+                      },
+                      error:function (data) {
+
+                      }
+                  })
+
+
+
+              })
+
+              function refreshCart(){
+                  var cartTavle = $(".cart-table");
+                  var cartBody = $(".card-body");
+
+                  var refreshCartUrl = '/api/cart/';
+                  var refreshMethod = "GET";
+                  var data = {};
+                  var products = cartBody.find(".cart-products");
+
+
+
+
+                  $.ajax({
+                      url:refreshCartUrl,
+                      method:refreshMethod,
+                      data:data,
+                      success:function (data) {
+                          if(data.products.length>0){
+                              cartBody.find(".cart-subtotal").text(data.subtotal)
+                              cartBody.find(".cart-total").text(data.total)
+                              console.log(cartBody.find(".cart-total").text(data.total))
+                              window.location.reload()
+
+                          }
+                          else{
+                              window.location.reload();
+                          }
+                      },
+                      error:function (data) {
+
+                      }
+                  })
+
+              }
+          })
+
+      </script>
+
+
+    
+{#        <script>#}
+{#            $(document).ready(function () {#}
+{#                #}
+{##}
+{#                #}
+{#                var productForm = $(".form-product-ajax")#}
+{#                productForm.submit(function (event) {#}
+{#                    var thisForm = $(this);#}
+{#                    event.preventDefault();#}
+{#                    var EndPoint = thisForm.attr("action");#}
+{#                    var method = thisForm.attr("method");#}
+{#                    var formData = thisForm.serialize();#}
+{##}
+{#                    console.log(thisForm.attr("action"),thisForm.attr("method"));#}
+{##}
+{#                    $.ajax({#}
+{#                        url:EndPoint,#}
+{#                        method:method,#}
+{#                        data:formData,#}
+{#                        success:function (data) {#}
+{#                            console.log(data);#}
+{#                            console.log("success")#}
+{#                            var submitSpan = thisForm.find(".submit-span")#}
+{#                            if(data.added){#}
+{#                                submitSpan.html("<button type='submit' class='btn btn-danger'>Remove</button>");#}
+{#                            }#}
+{#                            else{#}
+{#                                submitSpan.html("<button type='submit'  class='btn btn-success'>Add</button>");#}
+{#                            }#}
+{##}
+{#                            var navbarCount = $(".navbar-cart-count");#}
+{#                            navbarCount.text(data.cartItemCount);#}
+{#                            var currentPath = window.location.href;#}
+{##}
+{#                            if(window.location.href.indexOf("cart")!=-1){#}
+{#                                refreshCart();#}
+{#                            }#}
+{##}
+{#                        },#}
+{#                        error:function (data) {#}
+{#                            console.log(data);#}
+{#                            console.log("error")#}
+{#                        }#}
+{##}
+{#                    })#}
+{##}
+{#                })#}
+{##}
+{##}
+{#                function refreshCart() {#}
+{##}
+{#                    var cartTable = $(".cart-table");#}
+{#                    var cartBody = cartTable.find(".cart-body");#}
+{#                    #}
+{#                    var updateCartUrl = '/api/cart';#}
+{#                    var updateCartMethod = "GET";#}
+{#                    var data = {};#}
+{#                    var productRows = cartBody.find(".cart-product");#}
+{#                    var currentUrl = window.location.href;#}
+{##}
+{#                    #}
+{#                    $.ajax({#}
+{#                        url:updateCartUrl,#}
+{#                        method: updateCartMethod,#}
+{#                        data:data,#}
+{#                        success: function (data) {#}
+{#                            if(data.products.data>0){#}
+{#                                 productRows.html("");#}
+{#                                 cartBody.prepend("<tr><td colspan=3>Comming soon</td></tr>")#}
+{#                                cartBody.find(".cart-subtotal").text(data.subtotal);#}
+{#                                cartBody.find(".cart-total").text(data.total);#}
+{#                            }#}
+{#                            else{#}
+{#                                window.location.href = currentUrl;#}
+{#                            }#}
+{##}
+{#                        },#}
+{#                        error:function (data) {#}
+{#                            #}
+{#                        }#}
+{#                    })#}
+{#                    #}
+{##}
+{#                }#}
+{##}
+{#            })#}
+{#        </script>#}
+
+    </body>
+  </html>

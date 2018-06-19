@@ -1,0 +1,58 @@
+[
+{
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+        "title": "shirt",
+        "slug": "abc",
+        "description": "Viva la viva",
+        "price": "39.99",
+        "image": "products/1438488756/1438488756.jpeg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2018-04-23T13:59:24.316Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+        "title": "hat",
+        "slug": "hat",
+        "description": "This is a awesome hat",
+        "price": "9.99",
+        "image": "products/399479626.jpeg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2018-04-23T13:59:24.316Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+        "title": "supercomputer",
+        "slug": "supercomputer",
+        "description": "A super computer",
+        "price": "5000.00",
+        "image": "products/842219798.jpg",
+        "featured": true,
+        "active": true,
+        "timestamp": "2018-04-23T13:59:24.316Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+        "title": "Iphone6",
+        "slug": "iphone6",
+        "description": "Two hand iphone 6",
+        "price": "499.00",
+        "image": "products/13606874.jpg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2018-06-08T18:51:29.624Z"
+    }
+}
+]
